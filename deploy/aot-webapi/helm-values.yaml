@@ -1,0 +1,38 @@
+appFromExternalRepo:
+  enabled: false
+command:
+  - "/app/AOTWebApi"
+image:
+  repository: rsciriano/aot-webapi
+  tag: demo
+  #pullPolicy: Always
+
+ingress:
+  enabled: true
+  annotations: 
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  pathType: ImplementationSpecific
+  hostname: kubernetes.docker.internal
+  path: /aot-webapi(/|$)(.+)
+  ingressClassName: nginx
+
+resources:
+  requests:
+    cpu: 80m
+    memory: 250Mi
+  limits:
+    cpu: 100m
+    memory: 250Mi
+
+#replicaCount: 2
+
+autoscaling:
+  enabled: true     # Enable autoscaling for ASP.NET Core	(false)
+  minReplicas: 2    # Minimum number of ASP.NET Core replicas	(1)
+  maxReplicas: 16   # Maximum number of ASP.NET Core replicas	(11)
+  targetCPU: 70	    # Target CPU utilization percentage	("")
+  # Target Memory utilization percentage	()"")
+  #targetMemory: 90
+  #behavior:
+  #  scaleDown:

@@ -9,3 +9,8 @@ GET {{AOTWebApi_HostAddress}}/todos/1
 Accept: application/json
 
 ###
+
+GET {{AOTWebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
