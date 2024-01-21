@@ -1,5 +1,18 @@
 # AOTDemo
 
+## Publish
+
+```
+dotnet publish "./src/NoAOTWebApi/NoAOTWebApi.csproj" -c Release /p:UseAppHost=false
+ ls -l src/NoAOTWebApi/bin/Release/net8.0/publish
+```
+
+```
+dotnet publish "./src/AOTWebApi/AOTWebApi.csproj" -c Release /p:UseAppHost=true
+ ls -l -h src/AOTWebApi/bin/Release/net8.0/linux-x64/publish
+```
+
+
 ## Build Docker images
 
 ```

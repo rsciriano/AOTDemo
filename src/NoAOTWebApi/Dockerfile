@@ -8,15 +8,18 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["src/Shared/Shared.csproj", "./Shared/"]
 COPY ["src/NoAOTWebApi/NoAOTWebApi.csproj", "NoAOTWebApi/"]
 RUN dotnet restore "./NoAOTWebApi/./NoAOTWebApi.csproj"
 COPY src .
 WORKDIR "/src/NoAOTWebApi"
-RUN dotnet build "./NoAOTWebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./NoAOTWebApi.csproj" \
+-c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./NoAOTWebApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./NoAOTWebApi.csproj" \
+-c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

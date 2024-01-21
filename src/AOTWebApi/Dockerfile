@@ -12,15 +12,18 @@ RUN apt-get update \
     clang zlib1g-dev
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["src/Shared/Shared.csproj", "./Shared/"]
 COPY ["src/AOTWebApi/AOTWebApi.csproj", "./AOTWebApi/"]
 RUN dotnet restore "./AOTWebApi/AOTWebApi.csproj"
 COPY src .
 WORKDIR "/src/AOTWebApi"
-RUN dotnet build "./AOTWebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./AOTWebApi.csproj" \ 
+-c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./AOTWebApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
+RUN dotnet publish "./AOTWebApi.csproj" \
+-c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:8.0 AS final
 WORKDIR /app
